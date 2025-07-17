@@ -76,17 +76,20 @@ class Element(metaclass=ABCMeta):
         pass
 
     def __str__(self):
-        return "{}: ({}, {}, {})".format(self.name, self.key, len(self), self.value)
+        return "{}: ({}, {}, {})".format(
+            self.name,
+            ".".join("{:02x}".format(x) for x in self.key),
+            len(self),
+            ".".join("{:02x}".format(v) for v in self.value),
+        )
 
 
 class UnknownElement(Element):
     def __repr__(self):
         """Return as-code string used to re-create the object."""
-        args = ', '.join(map(repr, (bytes(self.key), bytes(self.value))))
-        return '{}({})'.format(self.__class__.__name__, args)
+        args = ", ".join(map(repr, (bytes(self.key), bytes(self.value))))
+        return "{}({})".format(self.__class__.__name__, args)
 
-
-
-
-
-
+    def structure(self):
+        """Print this unsupported element."""
+        print(str(self))
